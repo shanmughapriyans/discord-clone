@@ -15,6 +15,7 @@ export default function AppDashboard() {
   const { user, logout } = useAuthStore();
   const { servers, activeServerId, channels, activeChannelId, setServers, setActiveServerId, setChannels, setActiveChannelId } = useAppStore();
   
+  const [isMounted, setIsMounted] = useState(false);
   const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [newServerName, setNewServerName] = useState('');
@@ -25,6 +26,7 @@ export default function AppDashboard() {
   const [isAddingChannel, setIsAddingChannel] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     if (!user) {
       router.push('/login');
       return;
@@ -125,6 +127,8 @@ export default function AppDashboard() {
     socket?.emit('send_message', { channelId: activeChannelId, content: newMessage });
     setNewMessage('');
   };
+
+  if (!isMounted) return null;
 
   return (
     <>
